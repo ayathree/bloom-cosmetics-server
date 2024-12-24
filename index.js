@@ -26,17 +26,33 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const bloomCosmeticsCollection = client.db("bloomDB").collection("allBloomProduct");
+    const CategoryCollection = client.db("bloomDB").collection("categoryProduct");
 
     // read
     app.get('/allProducts', async(req,res)=>{
       const result = await bloomCosmeticsCollection.find().toArray()
       res.send(result)
   })
+  // read
+  app.get('/categories', async(req,res)=>{
+    const result = await CategoryCollection.find().toArray()
+    res.send(result)
+})
   // read for nerArrival
   app.get('/newArrivalProducts', async(req,res)=>{
     const result = await bloomCosmeticsCollection.find({ NewArrival: "yes" }).toArray()
     res.send(result)
 })
+// read for category
+app.get('/allProducts/:category', async(req,res)=>{
+   
+  const category = req.params.category; // Get category from URL parameter
+    const result = await bloomCosmeticsCollection
+    .find({ Category: category }) // Ensure "Category" matches case
+      .toArray();
+    res.send(result);
+})
+
     // // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
