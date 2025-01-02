@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -51,6 +51,13 @@ app.get('/allProducts/:category', async(req,res)=>{
     .find({ Category: category }) // Ensure "Category" matches case
       .toArray();
     res.send(result);
+})
+// read for details
+app.get('/allProductsDetails/:id', async(req, res)=>{
+  const id = req.params.id;
+  const query = {_id: new ObjectId(id)}
+  const result = await bloomCosmeticsCollection.findOne(query);
+  res.send(result)
 })
 
     // // Send a ping to confirm a successful connection
