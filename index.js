@@ -27,6 +27,7 @@ async function run() {
     // await client.connect();
     const bloomCosmeticsCollection = client.db("bloomDB").collection("allBloomProduct");
     const CategoryCollection = client.db("bloomDB").collection("categoryProduct");
+    const FeatureCollection = client.db("bloomDB").collection("featureProduct")
 
     // read
     app.get('/allProducts', async(req,res)=>{
@@ -37,6 +38,11 @@ async function run() {
   app.get('/categories', async(req,res)=>{
     const result = await CategoryCollection.find().toArray()
     res.send(result)
+})
+// read
+app.get('/features', async(req,res)=>{
+  const result = await FeatureCollection.find().toArray()
+  res.send(result)
 })
   // read for nerArrival
   app.get('/newArrivalProducts', async(req,res)=>{
@@ -59,7 +65,15 @@ app.get('/allProductsDetails/:id', async(req, res)=>{
   const result = await bloomCosmeticsCollection.findOne(query);
   res.send(result)
 })
-
+// read for featured
+app.get('/allProductsFeature/:feature', async(req,res)=>{
+   
+  const feature = req.params.feature; // Get category from URL parameter
+    const result = await bloomCosmeticsCollection
+    .find({ Feature: feature }) // Ensure "Category" matches case
+      .toArray();
+    res.send(result);
+})
     // // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
